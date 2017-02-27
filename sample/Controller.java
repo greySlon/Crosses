@@ -24,6 +24,7 @@ public class Controller {
     ObservableList<Node> list;
     private DrawItem[] field;
     private List<Integer> stepSequense;
+    private Backet backetRoot = null;
     @FXML
     GridPane gridPane;
 
@@ -43,9 +44,6 @@ public class Controller {
 
         field = new DrawItem[9];
         Arrays.fill(field, EMPTY);
-//        for (int i = 0; i < field.length; i++) {
-//            field[i] = EMPTY;
-//        }
         stepSequense = new ArrayList<>();
         clearField();
     }
@@ -69,8 +67,6 @@ public class Controller {
             }
         }
     }
-
-    Backet backetRoot = null;
 
     private void setPosition(ActionEvent event) {
         Object source = event.getTarget();

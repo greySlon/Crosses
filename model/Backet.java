@@ -90,25 +90,6 @@ public class Backet {
         listToDelete.add(child);
     }
 
-    /*private GameResult checkResult(DrawItem[] arr) {
-        if ((arr[0] == arr[1] && arr[1] == arr[2] && arr[0] != EMPTY) ||
-                (arr[3] == arr[4] && arr[4] == arr[5] && arr[3] != EMPTY) ||
-                (arr[6] == arr[7] && arr[7] == arr[8] && arr[6] != EMPTY) ||
-                (arr[0] == arr[3] && arr[3] == arr[6] && arr[0] != EMPTY) ||
-                (arr[1] == arr[4] && arr[4] == arr[7] && arr[1] != EMPTY) ||
-                (arr[2] == arr[5] && arr[5] == arr[8] && arr[2] != EMPTY) ||
-                (arr[0] == arr[4] && arr[4] == arr[8] && arr[0] != EMPTY) ||
-                (arr[2] == arr[4] && arr[4] == arr[6] && arr[2] != EMPTY)) {
-            if (DRAW_ITEM == ZERO) {
-                return WIN;
-            } else {
-                return LOSE;
-            }
-        } else {
-            return INDEFINITE;
-        }
-    }*/
-
     public static void main(String[] a) throws LostException {
         DrawItem[] arr = new DrawItem[9];
         for (int i = 0; i < arr.length; i++) {
