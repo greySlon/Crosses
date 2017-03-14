@@ -23,7 +23,7 @@ public class Controller {
     Stage stage;
     ObservableList<Node> list;
     private DrawItem[] field;
-    private RandomAiGameStrategy strategy = new RandomAiGameStrategy();
+    private AiGameStrategy strategy = new RandomAiGameStrategy();
     @FXML
     GridPane gridPane;
 
