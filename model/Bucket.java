@@ -34,7 +34,7 @@ public class Bucket {
                 throw new LostException();
             case INDEFINITE:
                 list = new LinkedList<>();
-                goNext();
+                findNestedBuckets();
         }
     }
 
@@ -52,16 +52,7 @@ public class Bucket {
         }
     }
 
-    private Bucket getBacket(int pos) {
-        for (Bucket backet : list) {
-            if (backet.POS == pos) {
-                return backet;
-            }
-        }
-        return null;
-    }
-
-    public void goNext() {
+    private void findNestedBuckets() {
         try {
             for (int i = 0; i < arr.length; i++) {
                 if (arr[i] == EMPTY) {
@@ -87,13 +78,4 @@ public class Bucket {
         listToDelete.add(child);
     }
 
-    public static void main(String[] a) throws LostException {
-        DrawItem[] arr = new DrawItem[9];
-        for (int i = 0; i < arr.length; i++) {
-            arr[i] = EMPTY;
-        }
-//        Bucket root = new Bucket(arr);
-        Bucket root = new Bucket(null, 4, arr, CROSS);
-        System.out.println(Bucket.count);
-    }
 }

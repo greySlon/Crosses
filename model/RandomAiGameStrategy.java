@@ -20,8 +20,7 @@ public class RandomAiGameStrategy implements AiGameStrategy {
         int zeroPos = -1;
         findNonlostCombinations();
         zeroPos = bucketRoot.getStep();
-        zeroPos = kostili(zeroPos);
-        return zeroPos;
+        return anyIfNoStep(zeroPos);
     }
 
     private void mnemonicTransform(int[] field) {
@@ -55,7 +54,7 @@ public class RandomAiGameStrategy implements AiGameStrategy {
         }
     }
 
-    private int kostili(int pos) {
+    private int anyIfNoStep(int pos) {
         if (pos == -1) {
             for (int i = 0; i < field.length; i++) {
                 if (field[i] == EMPTY) {
