@@ -23,7 +23,7 @@ public class Controller {
     Stage stage;
     ObservableList<Node> list;
     private DrawItem[] field;
-    private AiGameStrategy strategy = new RandomAiGameStrategy();
+    private AiGameStrategy strategy;
     @FXML
     GridPane gridPane;
 
@@ -36,8 +36,13 @@ public class Controller {
         this.stage = stage;
     }
 
+    private AiGameStrategy getAiGameStrategy() {
+        return new RandomAiGameStrategy();
+    }
+
     @FXML
     public void initialize() {
+        this.strategy = getAiGameStrategy();
         gridPane.addEventHandler(ActionEvent.ACTION, e -> setPosition(e));
         this.list = gridPane.getChildrenUnmodifiable();
 
@@ -88,6 +93,7 @@ public class Controller {
         }
         return res;
     }
+
     private void showStep(int index) {
         for (Node node : list) {
             if (node instanceof Button) {
@@ -100,6 +106,7 @@ public class Controller {
             }
         }
     }
+
     private void setZero(int zeroPos) throws FinishException {
         field[zeroPos] = ZERO;
         this.showStep(zeroPos);
