@@ -3,24 +3,24 @@ package model;
 import java.util.*;
 
 import static model.DrawItem.*;
-import static model.GameResult.*;
+import static model.GameResult.WIN;
 
 /**
  * Created by Sergii on 27.02.2017.
  */
-public class Backet {
+public class Bucket {
     public static int count = 0;
-    private Backet parent;
+    private Bucket parent;
     private DrawItem[] arr;
-    private List<Backet> list = new ArrayList<>();
-    private List<Backet> listToDelete = new ArrayList<>();
+    private List<Bucket> list = new ArrayList<>();
+    private List<Bucket> listToDelete = new ArrayList<>();
 
     public final int POS;
     public final DrawItem DRAW_ITEM;
     public final GameResult GAME_RESULT;
 
 
-    public Backet(Backet parent, int pos, DrawItem[] arr, DrawItem drawItem) throws LostException {
+    public Bucket(Bucket parent, int pos, DrawItem[] arr, DrawItem drawItem) throws LostException {
         count++;
         this.parent = parent;
         this.POS = pos;
@@ -34,29 +34,26 @@ public class Backet {
                 throw new LostException();
             case INDEFINITE:
                 list = new LinkedList<>();
-                goFurther();
+                goNext();
         }
     }
 
-    public int getStep(List<Integer> stepSequense) {
-        if (stepSequense == null || stepSequense.size() == 0) {
-            return (list.size() == 0) ? -1 : list.get(0).POS;
+    public int getStep() {
+        if (list.size() == 0) {
+            return -1;
         } else {
-            Backet backet = getBacket(stepSequense.get(0));
-            if (backet == null) {
-                return -1;
+            for (int i = 0; i < list.size(); i++) {
+                Bucket bucket = list.get(i);
+                if (bucket.GAME_RESULT == WIN) {
+                    return bucket.POS;
+                }
             }
-            int toIndex = stepSequense.size();
-            if (toIndex == 1) {
-                return backet.getStep(null);
-            } else {
-                return backet.getStep(stepSequense.subList(1, toIndex));
-            }
+            return list.get(0).POS;
         }
     }
 
-    private Backet getBacket(int pos) {
-        for (Backet backet : list) {
+    private Bucket getBacket(int pos) {
+        for (Bucket backet : list) {
             if (backet.POS == pos) {
                 return backet;
             }
@@ -64,12 +61,12 @@ public class Backet {
         return null;
     }
 
-    public void goFurther() {
+    public void goNext() {
         try {
             for (int i = 0; i < arr.length; i++) {
                 if (arr[i] == EMPTY) {
                     DrawItem tmpDrawItem = (this.DRAW_ITEM == ZERO) ? CROSS : ZERO;
-                    list.add(new Backet(this, i, arr, tmpDrawItem));
+                    list.add(new Bucket(this, i, arr, tmpDrawItem));
                 }
 
             }
@@ -80,13 +77,13 @@ public class Backet {
     }
 
     private void removeBad() {
-        for (Backet child : listToDelete) {
+        for (Bucket child : listToDelete) {
             this.list.remove(child);
             count--;
         }
     }
 
-    public void addToDelete(Backet child) {
+    public void addToDelete(Bucket child) {
         listToDelete.add(child);
     }
 
@@ -95,7 +92,8 @@ public class Backet {
         for (int i = 0; i < arr.length; i++) {
             arr[i] = EMPTY;
         }
-        Backet root = new Backet(null, 4, arr, CROSS);
-        System.out.println(Backet.count);
+//        Bucket root = new Bucket(arr);
+        Bucket root = new Bucket(null, 4, arr, CROSS);
+        System.out.println(Bucket.count);
     }
 }

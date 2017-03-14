@@ -23,8 +23,7 @@ public class Controller {
     Stage stage;
     ObservableList<Node> list;
     private DrawItem[] field;
-    private List<Integer> stepSequense;
-    private Backet backetRoot = null;
+    private RandomAiGameStrategy strategy = new RandomAiGameStrategy();
     @FXML
     GridPane gridPane;
 
@@ -44,7 +43,6 @@ public class Controller {
 
         field = new DrawItem[9];
         Arrays.fill(field, EMPTY);
-        stepSequense = new ArrayList<>();
         clearField();
     }
 
@@ -52,18 +50,6 @@ public class Controller {
         for (Node node : list) {
             if (node instanceof Button) {
                 ((Button) node).setText("");
-            }
-        }
-    }
-
-    private void showStep(int index) {
-        for (Node node : list) {
-            if (node instanceof Button) {
-                Button btn = (Button) node;
-                int id = Integer.parseInt(btn.getId().substring(1)) - 1;
-                if (id == index) {
-                    btn.setText("O");
-                }
             }
         }
     }
@@ -77,7 +63,7 @@ public class Controller {
                 if (validate(crossPos)) {
                     setCross(b, crossPos);
 
-                    int zeroPos = getZeroPos();
+                    int zeroPos = strategy.aiMakeTurn(arrTransform(field));
 
                     if (zeroPos == -1) {
                         new Alert(Alert.AlertType.INFORMATION, "No moves more", ButtonType.OK).showAndWait();
@@ -91,18 +77,29 @@ public class Controller {
         }
     }
 
-    private int getZeroPos() {
-        int zeroPos = -1;
-        initCombinations();
-        if (stepSequense.size() == 1) {
-            zeroPos = backetRoot.getStep(null);
-        } else {
-            zeroPos = backetRoot.getStep(stepSequense.subList(1, stepSequense.size()));
+    private int[] arrTransform(DrawItem[] arr) {
+        int[] res = new int[9];
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i] == CROSS) {
+                res[i] = 1;
+            } else if (arr[i] == ZERO) {
+                res[i] = -1;
+            }
         }
-        zeroPos = kostili(zeroPos);
-        return zeroPos;
+        return res;
     }
-
+    private void showStep(int index) {
+        for (Node node : list) {
+            if (node instanceof Button) {
+                Button btn = (Button) node;
+                int id = Integer.parseInt(btn.getId().substring(1)) - 1;
+                if (id == index) {
+                    btn.setText("O");
+                    return;
+                }
+            }
+        }
+    }
     private void setZero(int zeroPos) throws FinishException {
         field[zeroPos] = ZERO;
         this.showStep(zeroPos);
@@ -110,7 +107,6 @@ public class Controller {
             new Alert(Alert.AlertType.INFORMATION, "You lose", ButtonType.OK).showAndWait();
             throw new FinishException();
         }
-        stepSequense.add(zeroPos);
     }
 
     private void setCross(Button b, int crossPos) throws FinishException {
@@ -119,27 +115,6 @@ public class Controller {
         if (Checker.checkResult(field, CROSS) == LOSE) {
             new Alert(Alert.AlertType.INFORMATION, "You won", ButtonType.OK).showAndWait();
             throw new FinishException();
-        }
-        stepSequense.add(crossPos);
-    }
-
-    private void initCombinations() {
-        try {
-            if (backetRoot == null) backetRoot = new Backet(null, stepSequense.get(0), field, CROSS);
-        } catch (LostException e) {
-        }
-    }
-
-    private int kostili(int pos) {
-        if (pos == -1) {
-            for (int i = 0; i < field.length; i++) {
-                if (field[i] == EMPTY) {
-                    return i;
-                }
-            }
-            return -1;
-        } else {
-            return pos;
         }
     }
 
